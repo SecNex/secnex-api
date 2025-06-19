@@ -20,6 +20,8 @@ func healthz(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	log.Println("Starting application...")
+
 	dbHost := os.Getenv("DB_HOST")
 	__dbPort := os.Getenv("DB_PORT")
 	dbPort, err := strconv.Atoi(__dbPort)
