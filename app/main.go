@@ -33,6 +33,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	log.Printf("Database connection: %s:%d/%s", dbHost, dbPort, dbName)
 	db := database.NewServer(database.ServerConnection{
 		Host:     dbHost,
 		Port:     dbPort,
