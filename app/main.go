@@ -19,26 +19,23 @@ func healthz(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("OK"))
 }
 
+func getEnvDefault(key, defaultValue string) string {
+	if value := os.Getenv(key); value != "" && value != "*****" {
+		return value
+	}
+	return defaultValue
+}
+
 func main() {
 	log.Println("Starting application...")
 
 	dbHost := os.Getenv("DB_HOST")
-	log.Println("DB_HOST", dbHost)
-	__dbPort := os.Getenv("DB_PORT")
-	dbPort, err := strconv.Atoi(__dbPort)
-	if err != nil {
-		log.Fatal(err)
-	}
+	dbPort, _ := strconv.Atoi(getEnvDefault("DB_PORT", "5432"))
 	dbUser := os.Getenv("DB_USER")
 	dbPassword := os.Getenv("DB_PASS")
 	dbName := os.Getenv("DB_NAME")
 	apiHost := os.Getenv("API_HOST")
-	__apiPort := os.Getenv("API_PORT")
-	apiPort, err := strconv.Atoi(__apiPort)
-	if err != nil {
-		log.Fatal(err)
-	}
-
+	apiPort, _ := strconv.Atoi(getEnvDefault("API_PORT", "8080"))
 	log.Printf("Database connection: %s:%d/%s", dbHost, dbPort, dbName)
 	db := database.NewServer(database.ServerConnection{
 		Host:     dbHost,
@@ -55,8 +52,7 @@ func main() {
 
 	// Key Manager for RSA Private Keys
 	keyManager := helper.NewKeyManager()
-	err = keyManager.LoadOrGenerateKey()
-	if err != nil {
+	if err := keyManager.LoadOrGenerateKey(); err != nil {
 		log.Fatal("Error loading or generating key:", err)
 	}
 
