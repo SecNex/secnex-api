@@ -23,6 +23,7 @@ func main() {
 	log.Println("Starting application...")
 
 	dbHost := os.Getenv("DB_HOST")
+	log.Println("DB_HOST", dbHost)
 	__dbPort := os.Getenv("DB_PORT")
 	dbPort, err := strconv.Atoi(__dbPort)
 	if err != nil {
