@@ -59,7 +59,7 @@ func main() {
 	// Handler and Middleware
 	authHandler := auth.NewAuthHandler(db.DB, keyManager)
 	server := server.NewServer(apiHost, apiPort)
-	logger := middleware.NewHTTPLogger(log.New(os.Stdout, "", log.LstdFlags))
+	logger := middleware.NewHTTPLogger()
 	authMiddleware := middleware.NewAuthMiddleware(db.DB)
 
 	// Global Logging Middleware for all Requests
