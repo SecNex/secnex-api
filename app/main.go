@@ -21,7 +21,8 @@ func healthz(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	dbHost := os.Getenv("DB_HOST")
-	dbPort, err := strconv.Atoi(os.Getenv("DB_PORT"))
+	__dbPort := os.Getenv("DB_PORT")
+	dbPort, err := strconv.Atoi(__dbPort)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -29,7 +30,8 @@ func main() {
 	dbPassword := os.Getenv("DB_PASS")
 	dbName := os.Getenv("DB_NAME")
 	apiHost := os.Getenv("API_HOST")
-	apiPort, err := strconv.Atoi(os.Getenv("API_PORT"))
+	__apiPort := os.Getenv("API_PORT")
+	apiPort, err := strconv.Atoi(__apiPort)
 	if err != nil {
 		log.Fatal(err)
 	}
