@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -28,7 +27,7 @@ func getEnvDefault(key, defaultValue string) string {
 }
 
 func main() {
-	log.Println("Starting application...")
+	fmt.Println("Starting application...")
 
 	dbHost := os.Getenv("DB_HOST")
 	dbPort, _ := strconv.Atoi(getEnvDefault("DB_PORT", "5432"))
