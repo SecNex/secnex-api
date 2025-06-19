@@ -61,7 +61,7 @@ func main() {
 	authHandler := auth.NewAuthHandler(db.DB, keyManager)
 	server := server.NewServer(apiHost, apiPort)
 	logger := middleware.NewHTTPLogger()
-	authMiddleware := middleware.NewAuthMiddleware(db.DB)
+	authMiddleware := middleware.NewAuthMiddleware(db.DB, keyManager)
 
 	// Global Logging Middleware for all Requests
 	server.Router.Use(logger.LoggingMiddleware)
@@ -74,12 +74,10 @@ func main() {
 	server.Router.Handle("/auth/login", authMiddleware.ClientMiddleware(http.HandlerFunc(authHandler.Login))).Methods("POST")
 
 	// === PROTECTED AUTH-ENDPOINTS ===
-	authProtectedRouter := server.Router.PathPrefix("/auth").Subrouter()
-	authProtectedRouter.Use(authMiddleware.AuthMiddleware)
-	authProtectedRouter.HandleFunc("/authorize", authHandler.Authorize).Methods("POST")
-	authProtectedRouter.HandleFunc("/logout", authHandler.Logout).Methods("GET")
-	authProtectedRouter.HandleFunc("/session", authHandler.Session).Methods("GET")
-	authProtectedRouter.HandleFunc("/client", authHandler.Client).Methods("POST")
+	server.Router.Handle("/auth/authorize", authMiddleware.AuthMiddleware(http.HandlerFunc(authHandler.Authorize))).Methods("POST")
+	server.Router.Handle("/auth/logout", authMiddleware.AuthMiddleware(http.HandlerFunc(authHandler.Logout))).Methods("GET")
+	server.Router.Handle("/auth/session", authMiddleware.AuthMiddleware(http.HandlerFunc(authHandler.Session))).Methods("GET")
+	server.Router.Handle("/auth/client", authMiddleware.AuthMiddleware(http.HandlerFunc(authHandler.Client))).Methods("POST")
 
 	// === PROTECTED API-ENDPOINTS (for future use) ===
 	apiProtectedRouter := server.Router.PathPrefix("/api").Subrouter()

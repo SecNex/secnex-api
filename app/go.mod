@@ -2,7 +2,9 @@ module github.com/secnex/secnex-api
 
 go 1.24.3
 
-require github.com/secnex/sethorize-kit v0.1.0
+// replace github.com/secnex/sethorize-kit => ../kit
+
+require github.com/secnex/sethorize-kit v0.2.0
 
 require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
