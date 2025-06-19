@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -36,7 +37,7 @@ func main() {
 	dbName := os.Getenv("DB_NAME")
 	apiHost := os.Getenv("API_HOST")
 	apiPort, _ := strconv.Atoi(getEnvDefault("API_PORT", "8080"))
-	log.Printf("Database connection: %s:%d/%s", dbHost, dbPort, dbName)
+	fmt.Printf("Database connection: %s:%d/%s\n", dbHost, dbPort, dbName)
 	db := database.NewServer(database.ServerConnection{
 		Host:     dbHost,
 		Port:     dbPort,
@@ -53,7 +54,8 @@ func main() {
 	// Key Manager for RSA Private Keys
 	keyManager := helper.NewKeyManager()
 	if err := keyManager.LoadOrGenerateKey(); err != nil {
-		log.Fatal("Error loading or generating key:", err)
+		fmt.Println("Error loading or generating key:", err)
+		os.Exit(1)
 	}
 
 	// Handler and Middleware
