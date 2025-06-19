@@ -1,0 +1,42 @@
+networks:
+  internal:
+    name: secnex-internal
+    external: false
+
+services:
+  db:
+    container_name: secnex-auth-db
+    image: postgres:alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: auth
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - internal
+
+  api:
+    container_name: secnex-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      API_HOST: 0.0.0.0
+      API_PORT: 8080
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASS: postgres
+      DB_NAME: auth
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      - internal
+
+volumes:
+  postgres_data:
