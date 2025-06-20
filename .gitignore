@@ -19,3 +19,7 @@ go.work
 .env.development.local
 .env.test.local
 .env.production.local
+
+kit/
+
+.DS_Store

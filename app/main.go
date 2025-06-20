@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/secnex/sethorize-kit/database"
+	"github.com/secnex/sethorize-kit/handler/account"
 	"github.com/secnex/sethorize-kit/handler/auth"
 	"github.com/secnex/sethorize-kit/helper"
 	"github.com/secnex/sethorize-kit/initializer"
@@ -59,6 +60,7 @@ func main() {
 
 	// Handler and Middleware
 	authHandler := auth.NewAuthHandler(db.DB, keyManager)
+	accountHandler := account.NewAccountHandler(db.DB, keyManager)
 	server := server.NewServer(apiHost, apiPort)
 	logger := middleware.NewHTTPLogger()
 	authMiddleware := middleware.NewAuthMiddleware(db.DB, keyManager)
@@ -82,6 +84,7 @@ func main() {
 	// === PROTECTED API-ENDPOINTS (for future use) ===
 	apiProtectedRouter := server.Router.PathPrefix("/api").Subrouter()
 	apiProtectedRouter.Use(authMiddleware.AuthMiddleware)
+	apiProtectedRouter.Handle("/account/password", http.HandlerFunc(accountHandler.PasswordChange)).Methods("PUT")
 	// Here you can add more API endpoints
 
 	server.Start()
