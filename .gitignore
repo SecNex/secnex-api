@@ -23,3 +23,5 @@ go.work
 kit/
 
 .DS_Store
+
+*.key
